@@ -1,0 +1,26 @@
+# 17 — Checklist do projeto
+
+- [x] Mapa mundial
+- [x] Aeronaves em tempo real
+- [x] Aeroportos mundiais
+- [x] Satélite/híbrido/terreno/roadmap
+- [x] Configurações
+- [x] Painel de aeronave
+- [x] Fotos de aeronaves
+- [x] Origem/destino
+- [x] Rotas
+- [x] Seguir aeronave
+- [x] Registro/país/idade/ano quando disponível
+- [x] Filtros ar/solo/aposentadas
+- [x] Login/cadastro
+- [x] Login obrigatório
+- [x] Câmeras com fallback para bloqueio de iframe
+- [x] ATC com fallback para abertura direta
+- [x] Conceito de painel completo de aeroporto
+- [x] METAR planejado/ligação pelo backend
+- [x] Meu Voo planejado
+- [x] Logos de companhias
+- [x] Top Voos preparado sem números inventados
+- [ ] Contagem oficial de espectadores do FR24 via fonte autorizada
+- [ ] Fonte única e autorizada para chegadas/partidas programadas
+- [ ] Estatísticas históricas completas do aeroporto

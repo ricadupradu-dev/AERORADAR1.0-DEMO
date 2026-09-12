@@ -1,0 +1,185 @@
+
+/* AERO_RADAR - galeria de fotos otimizada para telas HD/FHD */
+.flight-photo-wrap {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.flight-photo-gallery {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+  align-items: stretch;
+}
+.flight-photo-gallery .flight-photo-card {
+  min-width: 0;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 8px;
+}
+.flight-photo-gallery img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: auto;
+}
+@media (max-width: 1200px) {
+  .flight-photo-gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 800px) {
+  .flight-photo-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .flight-photo-gallery { grid-template-columns: 1fr; }
+}
+
+
+/* AERO_RADAR - ícones de aeronaves amarelos */
+.aero-plane-icon {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:var(--plane-size, 28px);
+  height:var(--plane-size, 28px);
+  transform:rotate(var(--plane-heading, 0deg));
+  transform-origin:center center;
+  transition:width .18s ease,height .18s ease;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.65));
+  pointer-events:none;
+}
+.aero-plane-icon svg {
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+
+/* AERO_RADAR — galeria horizontal inspirada no painel enviado */
+.flight-photo-wrap{width:100%;box-sizing:border-box;margin:0 0 10px}
+.aero-gallery-title{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px 6px;color:#f5f7fa;font-size:15px}
+.aero-gallery-title b{font-weight:800;letter-spacing:.1px}
+.aero-gallery-title span{background:#0b79c9;border:1px solid #27c7ff;border-radius:7px;padding:3px 8px;font-weight:800;white-space:nowrap}
+.aero-main-photo{position:relative;width:100%;height:clamp(190px,20vw,250px);min-height:180px;overflow:hidden;background:#061421;border:1px solid #1bbfff;border-radius:10px;box-shadow:0 0 0 1px rgba(0,180,255,.15) inset}
+.aero-main-photo>a{display:block;width:100%;height:100%}
+.aero-main-photo img{display:block;width:100%;height:100%;object-fit:cover;background:#081b2a}
+.aero-main-photo .aero-photo-open{position:absolute;right:52px;bottom:9px;display:flex;align-items:center;justify-content:center;width:31px;height:31px;border-radius:6px;background:rgba(0,0,0,.58);color:#fff;font-size:21px;font-weight:800}
+.aero-main-photo>small{position:absolute;left:9px;bottom:8px;padding:3px 7px;border-radius:5px;background:rgba(0,0,0,.62);color:#fff;font-size:12px;max-width:65%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.aero-photo-nav{position:absolute;z-index:3;top:50%;transform:translateY(-50%);width:36px;height:54px;border:0;border-radius:7px;background:rgba(4,22,37,.78);color:#fff;font-size:35px;line-height:1;cursor:pointer}
+.aero-photo-prev{left:7px}.aero-photo-next{right:7px}
+.aero-photo-nav:hover{background:rgba(0,128,220,.9)}
+.aero-six-photos{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px;margin-top:8px}
+.aero-photo-thumb{position:relative;min-width:0;height:58px;padding:0;border:2px solid rgba(46,183,255,.35);border-radius:7px;overflow:hidden;background:#0a2234;cursor:pointer}
+.aero-photo-thumb img{width:100%;height:100%;display:block;object-fit:cover}
+.aero-photo-thumb span{position:absolute;left:4px;bottom:3px;min-width:17px;padding:1px 4px;border-radius:4px;background:rgba(0,0,0,.72);color:#fff;font-size:11px;font-weight:800}
+.aero-photo-thumb.active{border-color:#19b9ff;box-shadow:0 0 0 1px #19b9ff,0 0 10px rgba(25,185,255,.35)}
+.aero-photo-thumb.empty{cursor:default;color:#9fb2bf}
+.aero-photo-thumb.empty em{font-style:normal;font-size:10px}
+.photo-sources{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.photo-sources a{display:flex;align-items:center;justify-content:center;min-height:34px;padding:6px 10px;border-radius:7px;border:1px solid #12bfff;background:#087dcc;color:#fff;text-decoration:none;font-weight:800;font-size:13px;box-sizing:border-box}
+.photo-sources a+ a{background:#08253b}
+@media(max-width:700px){.aero-main-photo{height:210px}.aero-six-photos{gap:5px}.aero-photo-thumb{height:48px}.photo-sources{grid-template-columns:1fr}.aero-main-photo .aero-photo-open{right:46px}}
+
+
+/* Galeria 3 Planespotters + 3 JetPhotos */
+.aero-six-photos{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin-top:8px}
+.aero-photo-thumb{position:relative;min-width:0;padding:2px;border:1px solid rgba(0,220,255,.35);background:#063b58;border-radius:5px;cursor:pointer;overflow:hidden}
+.aero-photo-thumb img{display:block;width:100%;height:48px;object-fit:cover;border-radius:3px}
+.aero-photo-thumb.active{outline:2px solid #00dfff}
+.aero-photo-thumb span{position:absolute;left:3px;bottom:3px;background:rgba(0,0,0,.75);color:#fff;font-size:10px;padding:1px 3px;border-radius:2px}
+.aero-photo-thumb em{position:absolute;right:3px;top:3px;background:rgba(0,0,0,.75);color:#fff;font-size:8px;padding:1px 3px;border-radius:2px;font-style:normal}
+.aero-photo-thumb.jp-thumb{border-color:rgba(255,210,0,.7)}
+.aero-photo-source-badge{position:absolute;left:8px;top:8px;background:rgba(0,0,0,.75);color:#fff;padding:3px 6px;border-radius:4px;font-size:11px}
+
+/* AERO_RADAR — painel inspirado no layout enviado (FR24-like) */
+.details-panel{
+  width:min(500px,calc(100vw - 28px));
+  right:14px;top:14px;max-height:calc(100% - 28px);
+  background:#eef1f3;border:0;border-radius:3px;overflow:auto;
+  box-shadow:0 18px 50px rgba(0,0,0,.58);color:#18242b;
+}
+.details-panel > #details{background:#eef1f3}
+.fr24-head{position:relative;display:flex;justify-content:space-between;align-items:flex-start;padding:18px 18px 11px;background:#292929;color:#fff}
+.fr24-head-main{min-width:0;padding-right:12px}
+.fr24-head .flight-callsign{font-size:28px;line-height:1;color:#ffc400;font-weight:900;letter-spacing:.2px}
+.fr24-head .flight-airline{margin-top:7px;color:#f3f3f3;font-size:15px;font-weight:500}
+.flight-operated{margin-top:4px;color:#bdbdbd;font-size:12px}
+.fr24-head-icons{display:flex;align-items:center;gap:14px}
+.fr24-star{font-size:31px;line-height:1;color:#fff}
+.fr24-head-x{background:none;border:0;color:#fff;font-size:37px;line-height:28px;cursor:pointer;padding:0}
+.fr24-tags{padding:0 18px 12px;background:#292929}
+.fr24-tags span{background:#676767!important;border:0!important;border-radius:5px!important;padding:5px 9px!important;color:#fff!important;font-size:11px!important}
+.fr24-tags span:nth-child(2){background:#287ca7!important}
+.fr24-tags span:nth-child(3){background:#3c93b9!important}
+.flight-photo-wrap{margin:0!important;border:0!important;border-radius:0!important;background:#111!important;min-height:0!important}
+.aero-gallery-title{padding:8px 12px 6px;background:#292929;color:#fff;font-size:14px}
+.aero-gallery-title span{background:#454545;border:0;border-radius:4px;padding:3px 7px}
+.aero-main-photo{height:clamp(210px,28vw,300px);min-height:190px;border:0;border-radius:0;box-shadow:none}
+.aero-main-photo img{object-fit:cover}
+.aero-photo-nav{width:35px;height:54px;background:rgba(0,0,0,.45)}
+.aero-six-photos{padding:7px 10px;margin:0;background:#202020;gap:5px}
+.aero-photo-thumb{height:52px;background:#111;border-color:#555}
+.aero-photo-thumb img{height:100%}
+.photo-sources{padding:0 10px 10px;margin:0;background:#202020}
+.photo-sources a{min-height:32px;border:0;background:#287ca7;font-size:12px}
+.photo-sources a+a{background:#111;color:#66c9ff}
+.fr24-route-card{display:grid;grid-template-columns:1fr 54px 1fr;align-items:center;background:#eef1f3;border-bottom:1px solid #cbd1d5;padding:10px 10px 8px}
+.fr24-airport{text-align:center;min-width:0}
+.fr24-airport b{display:block;font-size:35px;line-height:1;font-weight:500;color:#30383d;letter-spacing:.5px}
+.fr24-airport strong{display:block;font-size:11px;color:#4c555b;margin-top:3px;min-height:14px;text-transform:uppercase}
+.fr24-airport small{display:block;font-size:9px;color:#707a80;margin-top:8px;text-transform:uppercase}
+.fr24-airport em{display:block;font-style:normal;font-size:11px;color:#333;margin-top:3px;font-weight:600}
+.fr24-route-line{position:relative;height:86px;display:flex;align-items:center;justify-content:center}
+.fr24-route-line:before{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;background:#d5d9dc}
+.fr24-route-line span{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;width:55px;height:55px;border-radius:50%;background:#fff;color:#ffbf00;font-size:29px;transform:rotate(90deg);box-shadow:0 0 0 1px #e2e5e7}
+.fr24-extra-info{background:#fff;padding:10px 12px 12px}
+.fr24-extra-info .flight-stats{gap:6px}
+.fr24-extra-info .flight-stats div{background:#f2f4f5;border:1px solid #d6dcdf;border-radius:2px;padding:7px}
+.fr24-extra-info .flight-stats small{color:#78838a}
+.fr24-extra-info .flight-stats b{color:#273138}
+.fr24-more-info{display:flex;align-items:center;justify-content:space-between;background:#2f87bd;color:#fff!important;border:0;padding:12px 16px;font-size:14px}
+.fr24-more-info span{font-size:25px;line-height:15px}
+.fr24-actions{background:#292929;grid-template-columns:repeat(5,1fr)}
+.fr24-actions button{height:67px;color:#fff;border-right:1px solid #444}
+.fr24-actions button span{display:block;font-size:25px;line-height:25px}
+.fr24-actions button small{font-size:10px;color:#e3e3e3;margin-top:6px}
+@media(max-width:700px){
+  .details-panel{left:0;right:0;top:0;width:100%;max-width:none;max-height:100%;border-radius:0}
+  .fr24-head .flight-callsign{font-size:27px}
+  .aero-main-photo{height:230px}
+  .fr24-airport b{font-size:32px}
+  .fr24-route-line{height:78px}
+}
+
+
+/* Painel AERO_RADAR — visual baseado nas telas de referência do usuário */
+.details-panel{width:min(540px,calc(100vw - 24px));right:12px;top:12px;max-height:calc(100% - 24px);border-radius:12px;background:#eef1f3;overflow:auto;box-shadow:0 16px 45px rgba(0,0,0,.55)}
+.fr24-head{padding:16px 16px 10px;background:#343434}
+.fr24-head .flight-callsign{font-size:29px}
+.fr24-head .flight-airline{font-size:16px;margin-top:5px}
+.flight-operated{font-size:13px;margin-top:3px;color:#ddd}
+.fr24-head-icons{gap:18px}.fr24-star{font-size:33px}.fr24-head-x{font-size:38px}
+.fr24-tags{padding:0 16px 13px;background:#343434}
+.fr24-tags span{font-size:12px!important;padding:5px 10px!important;border-radius:5px!important}
+.flight-photo-wrap{background:#111!important}
+.fr24-photo-carousel{position:relative;height:300px;background:#111;overflow:hidden}
+.fr24-photo-image{display:block;width:100%;height:100%;position:relative}
+.fr24-photo-image img{display:block;width:100%;height:100%;object-fit:cover}
+.fr24-photo-image small{position:absolute;left:14px;bottom:12px;color:#fff;background:rgba(0,0,0,.45);padding:2px 5px;font-size:13px;max-width:70%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fr24-photo-open{position:absolute;right:14px;bottom:12px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);color:#fff;font-size:23px}
+.fr24-photo-arrow{position:absolute;z-index:3;top:50%;transform:translateY(-50%);width:40px;height:58px;border:0;background:rgba(0,0,0,.38);color:#fff;font-size:38px;cursor:pointer}
+.fr24-photo-prev{left:0}.fr24-photo-next{right:0}
+.fr24-photo-dots{position:absolute;z-index:4;left:0;right:0;bottom:13px;display:flex;justify-content:center;gap:8px;pointer-events:auto}
+.fr24-photo-dots button{width:10px;height:10px;padding:0;border:0;border-radius:50%;background:#d9e2e8;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.45)}
+.fr24-photo-dots button.active{background:#ffb900}
+.fr24-photo-empty{padding:28px 16px;background:#111;color:#fff;text-align:center}.fr24-photo-empty .photo-sources{margin-top:14px;background:transparent;padding:0}
+.fr24-route-card{padding:0;background:#eee;border-bottom:1px solid #cfd4d8;grid-template-columns:1fr 70px 1fr}
+.fr24-airport{padding:13px 4px 12px}.fr24-airport b{font-size:44px;font-weight:500}.fr24-airport strong{font-size:12px}.fr24-airport small{font-size:10px;margin-top:9px}.fr24-airport em{font-size:13px;margin-top:4px}
+.fr24-route-line{height:112px}.fr24-route-line:before{background:#d7dadd}.fr24-route-line span{width:56px;height:56px;font-size:29px}
+.fr24-extra-info{padding:12px;background:#fff}.fr24-extra-info .flight-stats div{padding:8px}.fr24-extra-info .flight-stats small{font-size:10px}.fr24-extra-info .flight-stats b{font-size:14px}
+.fr24-more-info{padding:13px 16px;background:#2f8bc3;font-size:15px}
+.fr24-actions button{height:68px}.fr24-actions button span{font-size:26px}
+@media(max-width:700px){.details-panel{left:0;right:0;top:0;width:100%;max-height:100%;border-radius:0}.fr24-photo-carousel{height:250px}.fr24-airport b{font-size:39px}}
+.fr24-actions button.active{background:#0756b8;box-shadow:inset 0 0 0 1px #2992ff;color:#fff}
+.fr24-actions button.active small{color:#fff}

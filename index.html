@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AERO RADAR — Rastreamento de Voos</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/photo-quality.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <img class="brand-logo" src="assets/aero-radar-logo.png" alt="AERO RADAR — O MUNDO EM MOVIMENTO">
+  </div>
+  <nav class="topnav">
+    <a class="active" href="#radar"><span>▤</span> <span data-i18n="nav.map">Mapa</span></a>
+    <a href="#fleet"><span>✈</span> <span data-i18n="nav.aircraft">Aeronaves</span></a>
+    <a href="#aeroportos"><span>♜</span> <span data-i18n="nav.airports"><span data-i18n="filters.airports">Aeroportos</span></span></a>
+    <a href="#photos"><span>▣</span> <span data-i18n="nav.photos">Fotos</span></a>
+    <a href="#destinos"><span>🧭</span> <span data-i18n="nav.destinations">Destinos</span></a>
+    <a href="#topvoos"><span>🔥</span> <span data-i18n="nav.top">Top voos</span></a>
+    <a href="#myvoos" id="myFlightBtn"><span>🧳</span> <span data-i18n="nav.myflight">Meu voo</span></a>
+    <a href="#fonia"><span>◉</span> <span data-i18n="nav.radio">Rádio</span></a>
+    <a href="#config"><span>⚙</span> <span data-i18n="nav.settings">Configurações</span></a>
+  </nav>
+  <div class="top-tools">
+    <label class="language-picker" title="Idioma">🌐 <select id="languageSelect" aria-label="Idioma do site">
+      <option value="pt-BR">Português (Brasil)</option><option value="pt-PT">Português (Portugal)</option><option value="en">English</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="it">Italiano</option><option value="nl">Nederlands</option><option value="ru">Русский</option><option value="ar">العربية</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="hi">हिन्दी</option><option value="tr">Türkçe</option><option value="pl">Polski</option><option value="uk">Українська</option>
+    </select></label>
+    <div class="top-account" id="topAccount">
+      <span class="top-account-status" id="topAccountStatus">🔒 Acesso restrito</span>
+      <button type="button" id="topLoginBtn">Entrar / Criar conta</button>
+      <button type="button" id="topLogoutBtn" class="top-logout hidden">Sair</button>
+    </div>
+  </div>
+</header>
+
+<main class="radar-page" id="radar">
+  <aside class="sidebar">
+    <div class="side-heading"><span class="funnel">▽</span><strong data-i18n="filters.title">Filtros</strong></div>
+
+    <label class="check-row aircraft-filter"><span class="row-icon aircraft-yellow">✈</span><span><span data-i18n="filters.allAircraft">Todas as aeronaves</span></span><input id="allAircraft" type="checkbox" checked><i></i></label>
+    <label class="check-row"><span class="row-icon aircraft-yellow">✈</span><span><span data-i18n="filters.commercial">Aeronaves comerciais</span></span><input id="commercial" type="checkbox"><i></i></label>
+    <label class="check-row"><span class="row-icon aircraft-yellow">✈</span><span><span data-i18n="filters.executive">Aeronaves executivas</span></span><input id="executive" type="checkbox"><i></i></label>
+    <label class="check-row"><span class="row-icon aircraft-yellow">✈</span><span><span data-i18n="filters.military">Aeronaves militares</span></span><input id="military" type="checkbox"><i></i></label>
+    <label class="check-row"><span class="row-icon aircraft-yellow">✈</span><span><span data-i18n="filters.airborne">Aeronaves em voo</span></span><input id="airborne" type="checkbox" checked><i></i></label>
+    <label class="check-row"><span class="row-icon aircraft-yellow">▰</span><span><span data-i18n="filters.ground">Aeronaves em solo / gate</span></span><input id="ground" type="checkbox" checked><i></i></label>
+    <label class="check-row"><span class="row-icon aircraft-yellow">◼</span><span><span data-i18n="filters.retired">Aeronaves aposentadas</span></span><input id="retired" type="checkbox"><i></i></label>
+    <label class="check-row airport-filter"><span class="row-icon airport-blue">●</span><span><span data-i18n="filters.airports">Aeroportos</span></span><input id="showAirports" type="checkbox" checked><i></i></label>
+    <label class="check-row"><span class="row-icon">♧</span><span><span data-i18n="filters.routes">Rotas</span></span><input id="showRoutes" type="checkbox"><i></i></label>
+    <label class="check-row"><span class="row-icon">▣</span><span><span data-i18n="filters.cameras">Câmeras ao vivo</span></span><input id="showCameras" type="checkbox"><i></i></label>
+
+    <div class="filter-separator"></div>
+
+    <label class="select-label" data-i18n="filters.aircraftType">Tipo de aeronave</label>
+    <select id="aircraft"><option value="all">Todos</option></select>
+
+    <label class="select-label" data-i18n="filters.airport">Aeroporto</label>
+    <select id="airport"><option value="all">Todos</option></select>
+
+    <label class="select-label" data-i18n="filters.country">País</label>
+    <select id="country"><option value="all">Todos</option></select>
+
+    <label class="select-label" data-i18n="filters.route">Origem/Destino</label>
+    <select id="routeFilter"><option value="all">Todos</option></select>
+
+    <div class="side-spacer"></div>
+    <div class="live-status"><span></span>Dados em tempo real (OpenSky)</div>
+  </aside>
+
+  <section class="map-area">
+    <div id="mapLayerControl" class="map-layer-control" aria-label="Camadas do mapa">
+  <button id="mapLayerToggle" type="button" title="Camadas de mapa">▱ Camadas</button>
+  <div id="mapLayerMenu" class="map-layer-menu hidden">
+    <div class="map-layer-title">CAMADAS DO MAPA</div>
+    <button data-layer-style="satellite">🛰️ Satellite</button>
+    <button data-layer-style="hybrid">🌍 Hybrid</button>
+    <button data-layer-style="terrain">⛰️ Terrain</button>
+    <button data-layer-style="roadmap">🛣️ Roadmap</button>
+    <button data-layer-style="radar-blue">🔵 Radar (blue)</button>
+    <button data-layer-style="radar-dark">🌑 Radar (dark)</button>
+  </div>
+</div>
+
+<div id="map"></div>
+
+    <div class="map-search">
+      <span class="map-search-icon">⌕</span>
+      <input id="search" placeholder="Buscar voo, aeronave, aeroporto, matrícula..." data-i18n-placeholder="search.placeholder">
+    </div>
+
+    <div class="map-filter-bar" aria-label="Filtros rápidos do mapa">
+      <button type="button" class="map-filter active" data-map-filter="all" data-i18n="map.all">Todas</button>
+      <button type="button" class="map-filter" data-map-filter="commercial" data-i18n="map.commercial">Comerciais</button>
+      <button type="button" class="map-filter" data-map-filter="executive" data-i18n="map.executive">Executivas</button>
+      <button type="button" class="map-filter" data-map-filter="military" data-i18n="map.military">Militares</button>
+      <button type="button" class="map-filter" data-map-filter="airports"><span data-i18n="filters.airports">Aeroportos</span></button>
+      <button type="button" class="map-filter map-filter-more" id="mapFilterMore">⚙ <span data-i18n="map.filters">Filtros</span></button>
+    </div>
+
+    <div class="map-advanced-filters" id="mapAdvancedFilters">
+      <div class="map-filter-title">Filtros do mapa <button type="button" id="mapFilterClose">×</button></div>
+      <label>Tipo<select id="mapAircraft"><option value="all">Todos</option></select></label>
+      <label>País<select id="mapCountry"><option value="all">Todos</option><option value="Brasil">Brasil</option><option value="Internacional">Internacional</option></select></label>
+      <label>Aeroporto<select id="mapAirport"><option value="all">Todos</option></select></label>
+      <label>Origem / destino<select id="mapRoute"><option value="all">Todos</option></select></label>
+      <label class="map-check"><input id="mapShowAirports" type="checkbox" checked><span>Mostrar aeroportos</span></label>
+    </div>
+
+    <div class="map-counter" id="mapCounter">
+      <div class="counter-plane">✈</div>
+      <div><small data-i18n="map.total">Total de aeronaves exibidas</small><strong id="count">0</strong></div>
+      <span class="counter-live"></span>
+    </div>
+
+    <div class="map-location" id="locate" title="Minha localização">⌖</div>
+
+    <div class="details-panel hidden" id="detailsPanel">
+      <button class="panel-close" id="closeDetails">×</button>
+      <div id="details"></div>
+      <div id="photo" class="photo-credit-area"></div>
+    </div>
+  </section>
+</main>
+
+<section class="below-map" id="fleet">
+  <div class="card"><h2><span data-i18n="filters.allAircraft">Todas as aeronaves</span></h2><div id="fleetList" class="cards"></div></div>
+  <div class="card retired-fleet-card" id="retiredFleet"><div class="retired-head"><div><h2>🛬 Aeronaves aposentadas / que pararam de voar</h2><p class="muted">Catálogo mundial de modelos históricos, aeronaves fora de produção e tipos que deixaram o serviço comercial.</p></div><strong class="retired-count"><span id="retiredCount">0</span> registros</strong></div><div class="retired-toolbar"><input id="retiredSearch" type="search" placeholder="Pesquisar modelo, fabricante ou tipo..." autocomplete="off"><span>↕ Role para ver toda a lista</span></div><div id="retiredList" class="cards retired-scroll"></div></div>
+  <div class="card" id="aeroportos"><h2><span data-i18n="filters.airports">Aeroportos</span></h2><div id="airports" class="cards"></div></div>
+  <div class="card" id="photos"><h2 data-i18n="cards.photos">Fotos da aeronave</h2><div id="popular" class="cards"></div></div>
+  <div class="card destinations-card" id="destinos"><div class="destinations-head"><div><h2>🧭 <span data-i18n="cards.destinations">Destinos em tempo real</span></h2><p>Destinos identificados a partir do tráfego ADS-B atual. Clique para filtrar o radar.</p></div><span id="destinationsCount" class="destinations-count">0 destinos</span></div><div id="destinationsList" class="destinations-list"></div></div>
+  <div class="card top-tracked-card" id="topvoos"><div class="top-tracked-head"><div><h2>🔥 <span data-i18n="cards.topFlights">Voos mais vistos no mundo</span></h2><p>Ranking ao vivo dos voos que estão recebendo mais acompanhamento.</p></div><a class="fr24-source-btn" target="_blank" rel="noopener noreferrer" href="https://www.flightradar24.com/flights/most-tracked">Fonte: Flightradar24 ↗</a></div><div id="topTrackedStatus" class="top-tracked-status">Carregando ranking...</div><div id="topTrackedList" class="top-tracked-list"></div><div class="top-tracked-note">A contagem de acompanhamento é fornecida pelo Flightradar24. O AERO RADAR apenas exibe os dados públicos retornados pela fonte.</div></div>
+  <div class="card" id="cameras"><h2><span data-i18n="filters.cameras">Câmeras ao vivo</span></h2><p class="muted">As transmissões são incorporadas quando o provedor permite reprodução dentro do AERO RADAR.</p><div id="cameraGrid" class="camera-grid"></div></div>
+  <div class="card atc-card" id="fonia"><div class="atc-head"><div><h2>🎧 Fonia / Rádio ATC</h2><p>Escute dentro do AERO RADAR, usando players de provedores terceiros quando a incorporação é permitida.</p></div><span class="atc-live-badge">● AO VIVO</span></div><div class="atc-toolbar"><label>Fonte<select id="atcProvider"><option value="aeroescuta">🇧🇷 Aeroescuta</option><option value="liveatc">🌎 LiveATC</option></select></label><label>Aeroporto / região<select id="atcStation"><option value="SBSP">Congonhas — CGH</option><option value="SBGR">Guarulhos — GRU</option><option value="SBKP">Viracopos — VCP</option><option value="SBMT">Campo de Marte — SBMT</option><option value="SBGL">Galeão — GIG</option><option value="SBRJ">Santos Dumont — SDU</option><option value="SBBE">Belém — BEL</option><option value="SBCT">Curitiba — CWB</option><option value="SBBR">Brasília — BSB</option><option value="SBJH">Catarina — SBJH</option></select></label><button id="atcPlay" class="atc-play" type="button">▶ Ouvir ATC</button></div><div class="atc-player-wrap"><div id="atcStatus" class="atc-status">Escolha uma fonte e clique em <b>Ouvir ATC</b>.</div><iframe id="atcFrame" class="atc-frame hidden" title="Áudio ATC" allow="autoplay; microphone" loading="lazy"></iframe></div><div class="atc-note">O áudio permanece nesta página. O AERO RADAR não copia nem redistribui o stream; ele incorpora o conteúdo do provedor quando o navegador e o provedor permitem.</div><div class="radio" style="margin-top:12px"><input id="radioSearch" placeholder="Pesquisar ICAO ou aeroporto"><button id="radioBtn">Pesquisar</button></div><div id="radioResults"></div></div>
+  <div class="card" id="myvoos"><h2>🧳 Meu voo</h2><p class="muted">Seu diário pessoal de voos, inspirado no myFlightradar24.</p><button type="button" id="myFlightBtnCard" class="my-flight-open">Adicionar voo</button></div>
+  <div class="card" id="config"><h2 data-i18n="cards.settings">Configurações</h2><div id="userBox">Visitante</div><button id="loginBtn" data-i18n="auth.login">Entrar / Cadastro</button><button id="logoutBtn" class="settings-logout hidden" type="button" data-i18n="auth.logout">Sair</button></div>
+</section>
+
+<div id="airportPanel" class="airport-panel hidden" role="dialog" aria-modal="true" aria-label="Detalhes do aeroporto"><div class="airport-panel-box"><div id="airportPanelBody"></div></div></div>
+
+<div id="myFlightModal" class="modal hidden"><div class="modalbox my-flight-box"><button class="close" id="myFlightClose">×</button><h2>🧳 Meu voo</h2><p class="muted">Registre voos passados ou futuros e acompanhe seu histórico pessoal.</p><form id="myFlightForm" class="my-flight-form"><input name="flight_number" placeholder="Número do voo (ex.: LA3456)" required><input name="flight_date" type="date" required><input name="origin" placeholder="Origem (GRU)" required><input name="destination" placeholder="Destino (GIG)" required><input name="airline" placeholder="Companhia aérea"><input name="seat" placeholder="Assento (opcional)"><button>Adicionar voo</button></form><p id="myFlightMsg"></p><h3>Meus voos</h3><div id="myFlightList" class="my-flight-list"></div></div></div>
+
+<div id="settingsModal" class="settings-modal hidden" role="dialog" aria-modal="true" aria-label="Configurações">
+  <div class="settings-box">
+    <div class="settings-head"><h2>Settings</h2><button type="button" id="closeSettings">×</button></div>
+    <div class="settings-tabs">
+      <button class="active" data-settings-tab="map">Map</button>
+      <button data-settings-tab="visibility">Visibility</button>
+      <button data-settings-tab="misc">Misc</button>
+    </div>
+    <div class="settings-body">
+      <section class="settings-pane active" data-settings-pane="map">
+        <h3>MAP STYLE</h3>
+        <div class="map-style-grid">
+          <button class="map-style-card" data-map-style="terrain"><span class="style-thumb terrain-thumb"></span><b>Terrain</b></button>
+          <button class="map-style-card" data-map-style="roadmap"><span class="style-thumb roadmap-thumb"></span><b>Roadmap</b></button>
+          <button class="map-style-card" data-map-style="grayscale"><span class="style-thumb grayscale-thumb"></span><b>Greyscale</b></button>
+          <button class="map-style-card" data-map-style="radar-blue"><span class="style-thumb radar-blue-thumb"></span><b>Radar (blue)</b></button>
+          <button class="map-style-card" data-map-style="radar-dark"><span class="style-thumb radar-dark-thumb"></span><b>Radar (dark)</b></button>
+          <button class="map-style-card" data-map-style="aubergine"><span class="style-thumb aubergine-thumb"></span><b>Aubergine</b></button>
+          <button class="map-style-card" data-map-style="satellite"><span class="style-thumb satellite-thumb"></span><b>Satellite</b></button>
+          <button class="map-style-card" data-map-style="hybrid"><span class="style-thumb hybrid-thumb"></span><b>Hybrid</b></button>
+          <button class="map-style-card" data-map-style="blackwhite"><span class="style-thumb blackwhite-thumb"></span><b>Black/White</b></button>
+        </div>
+        <div class="settings-divider"></div>
+        <div class="settings-section-title">Brightness</div>
+        <div class="brightness-row"><span>☼</span><input id="mapBrightness" type="range" min="60" max="140" value="100"><span>☀</span></div>
+        <div class="settings-divider"></div>
+        <div class="settings-section-title">DAY/NIGHT LINE</div>
+        <div class="daynight-option"><div class="daynight-preview">☀︎ ◐ ☾</div><div><strong>Day/night line</strong><p>See where it is day and night on the map at a glance</p></div><label class="switch"><input id="dayNightLine" type="checkbox"><i></i></label></div>
+      </section>
+      <section class="settings-pane" data-settings-pane="visibility">
+        <h3>VISIBILITY</h3>
+        <label class="settings-check"><span>Mostrar aeroportos</span><input id="settingsAirports" type="checkbox" checked><i></i></label>
+        <label class="settings-check"><span>Mostrar nomes dos voos</span><input id="settingsLabels" type="checkbox" checked><i></i></label>
+        <label class="settings-check"><span>Mostrar contador de aeronaves</span><input id="settingsCounter" type="checkbox" checked><i></i></label>
+        <label class="settings-check"><span>Mostrar filtros rápidos</span><input id="settingsQuickFilters" type="checkbox" checked><i></i></label>
+        <div class="settings-section-title">STATUS DAS AERONAVES</div>
+        <label class="settings-check"><span>🟡 Aeronaves em voo</span><input id="settingsAirborne" type="checkbox" checked><i></i></label>
+        <label class="settings-check"><span>▰ Aeronaves em solo / gate</span><input id="settingsGround" type="checkbox" checked><i></i></label>
+        <label class="settings-check"><span>◼ Aeronaves aposentadas</span><input id="settingsRetired" type="checkbox"><i></i></label>
+      </section>
+      <section class="settings-pane" data-settings-pane="misc">
+        <h3>MISC</h3>
+        <label class="settings-check"><span>Atualização automática</span><input id="settingsAutoRefresh" type="checkbox" checked><i></i></label>
+        <label class="settings-check"><span>Animações reduzidas</span><input id="settingsReducedMotion" type="checkbox"><i></i></label>
+        <p class="settings-note">As preferências do mapa ficam salvas neste navegador.</p>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div id="authGate" class="auth-gate" aria-hidden="true">
+  <div class="auth-gate-box">
+    <div class="auth-gate-logo">✈</div>
+    <div class="auth-gate-kicker">AERO RADAR</div>
+    <h1>Entre para acessar o radar</h1>
+    <p>Faça login ou crie sua conta gratuitamente para usar o mapa, aeronaves, aeroportos, fotos, rádio e câmeras.</p>
+    <button type="button" id="gateLoginBtn" class="auth-gate-btn">Entrar ou criar conta</button>
+    <small>Seu acesso permanece ativo enquanto sua sessão estiver válida.</small>
+  </div>
+</div>
+
+<div id="auth" class="modal hidden"><div class="modalbox"><button class="close" id="closeAuth">×</button><h2 id="authTitle">Entrar</h2>
+<div class="tabs"><button id="tabLogin">Entrar</button><button id="tabRegister">Criar conta</button></div>
+<form id="authForm"><input id="name" placeholder="Nome" class="registerOnly"><input id="email" type="email" placeholder="E-mail" required><input id="password" type="password" placeholder="Senha" required minlength="8"><button>Continuar</button></form><p id="authMsg"></p></div></div>
+
+<div style="position:fixed;right:10px;bottom:8px;z-index:1200;background:rgba(0,0,0,.72);color:#fff;padding:5px 9px;border-radius:6px;font:11px Arial,sans-serif;backdrop-filter:blur(4px)">Dados ADS-B: <a href="https://adsb.fi/" target="_blank" rel="noopener noreferrer" style="color:#fff;text-decoration:underline">adsb.fi</a></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-terminator@1.2.1/L.Terminator.js"></script>
+<script src="config.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

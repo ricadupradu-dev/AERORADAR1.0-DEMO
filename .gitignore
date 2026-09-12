@@ -1,0 +1,6 @@
+node_modules/
+.env
+private/*
+!private/README.txt
+*.log
+.DS_Store
